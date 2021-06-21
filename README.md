@@ -6,7 +6,7 @@ The problem of next word prediction is considered.
 The project is a part of my Master's thesis work. We consider the problem of Next word prediction in the setup of federated learning here. General FL approaches learning a common centralized model for a task which performs well in IID case. Some modifications work on the personalization aspect by keeping a separate client copy which aims to take the best of the global world as well as the local world. The approaches make use of the client server interaction only. 
 
 In this project we make use of the client - client interaction in the FL setting for the next word prediction problem. Our work is based on the hypothesis that those who know each other or chat each other they are willing to share their data though not directly but there model. 
-We assume that there is no data sharing and only the model parameters that are shared among the neighbours. We extend the existing APFL algorithm to incorporate the client client interaction in such a setup. The mixing parameter is now defined between two clients which can be compared to a notion of edge weights in a graph. Thus going on the lines of apfl, we maintain 3 models at each client local copy of global model, private model , personalized model. The personalizaed model foe each client is a convex combination of its own private model and its neighbours sharable global model. Through the use of the mixing parameter we aim to capture the correlation between the textual similarity and the learnt mixture weights through the algorithm.
+We assume that there is no data sharing and only the model parameters that are shared among the neighbours. We extend the existing [APFL](https://arxiv.org/pdf/2003.13461.pdf) algorithm to incorporate the client client interaction in such a setup. The mixing parameter is now defined between two clients which can be compared to a notion of edge weights in a graph. Thus going on the lines of apfl, we maintain 3 models at each client local copy of global model, private model , personalized model. The personalized model for each client is a convex combination of its own private model and its neighbours sharable global model. Through the use of the mixing parameter we aim to capture the correlation between the textual similarity and the learnt mixture weights through the algorithm.
 
 The setup looks like this -
 
@@ -14,7 +14,7 @@ The setup looks like this -
 
 
 ## Datasets
-We consider some realworld textual datasets to simulate the real conversation across the clients. We consider europarl corpus (european paraliamentary proceedings), supreme court corpus (transcripts of proceedings of supreme court), movie dialog( actual dialog lines from some movies) , Taskmaster( chatbot data), Word Predictions(Normal wikipedia text data).
+We consider some realworld textual datasets to simulate the real conversation across the clients. We consider [europarl corpus](https://www.statmt.org/europarl/) (european paraliamentary proceedings), [supreme court corpus](https://confluence.cornell.edu/display/llresearch/Supreme+Court+Dialogs+Corpus) (transcripts of proceedings of supreme court), [movie dialogs](https://arxiv.org/abs/1106.3077)( actual dialog lines from some movies) , [Taskmaster](https://arxiv.org/abs/1909.05358) ( chatbot data), [Word Predictions](https://www.aclweb.org/anthology/C18-2028/)(Normal wikipedia text data).
 
 
 ## Code
@@ -52,7 +52,7 @@ main:
 ```
 
 We are implementing 3 algorithms namely - gapfl, fedavg, training independently(without sharing of model parameters). 
-The other two algorithms we consider are perfedavg, pfedme whose code implementations were taken from here.
+The other two algorithms we consider are [perfedavg](https://arxiv.org/abs/2002.07948), [pfedme](https://arxiv.org/abs/2006.08848) whose code implementations were taken from [here](https://github.com/CharlieDinh/pFedMe).
 
 
 
@@ -70,5 +70,5 @@ where -s parameter specifies the sentence, l parameter sets the sentence length,
 
 To compare the similarity of the two corpuses, set the dataset1 and datasets 2 lists in the language_model_similarity.py file. The same should be defined in the get_sents function in the Language_model_training_colab.py file. Run
 
-``` python language_model_similarity.py ``` to get similarty scores for two corpuses using the USE(Universal Sentence Encoder) architecture.
+``` python language_model_similarity.py ``` to get similarity scores for two corpuses using the USE(Universal Sentence Encoder) architecture.
 
