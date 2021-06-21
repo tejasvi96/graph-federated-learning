@@ -16,6 +16,7 @@ The setup looks like this -
 ## Datasets
 We consider some realworld textual datasets to simulate the real conversation across the clients. We consider [europarl corpus](https://www.statmt.org/europarl/) (european paraliamentary proceedings), [supreme court corpus](https://confluence.cornell.edu/display/llresearch/Supreme+Court+Dialogs+Corpus) (transcripts of proceedings of supreme court), [movie dialogs](https://arxiv.org/abs/1106.3077)( actual dialog lines from some movies) , [Taskmaster](https://arxiv.org/abs/1909.05358) ( chatbot data), [Word Predictions](https://www.aclweb.org/anthology/C18-2028/)(Normal wikipedia text data).
 
+Run script ```python dataset_download.py``` to download the used datasets.
 
 ## Code
 
