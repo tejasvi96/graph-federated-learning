@@ -158,6 +158,9 @@ class fedavg():
         for ind in range(self.params['NUM_CLIENTS']):
             loss_temp.append(self.val_func(self.models[ind]['global'],self.val_data[ind]))
         val_loss.append(loss_temp)
+        model_path=self.options['master_path']+"fedavg_model.pt"
+        print(model_path)
+        torch.save(global_model.state_dict(),model_path)
         return lossValues,val_loss
 
     def plot_results(self,lossValues):

@@ -29,7 +29,11 @@ from torch.optim.lr_scheduler import ReduceLROnPlateau
 from torch.utils.tensorboard import SummaryWriter
 from torch.utils.data import DataLoader
 from torch.utils.data import TensorDataset
-
+def print_size_of_model(model):
+    torch.save(model.state_dict(), "temp.p")
+    print('Size (MB):', os.path.getsize("temp.p")/1e6)
+    os.remove('temp.p')
+import torch.quantization
 import re# function to remove special characters
 def remove_extra_whitespace_tabs(text):
     #pattern = r'^\s+$|\s+$'
@@ -81,6 +85,8 @@ class Model(nn.Module):
 #         print(inp.shape)
 #         print(inp)
         enc_embedding=self.embedding(inp)
+#         print(enc_embedding.dtype)
+        enc_embedding=enc_embedding.float()
         # print(enc_embedding.shape)
         mask=torch.ones((enc_embedding.shape[0],options['max_seq_len'])).to(device)
 #         print(device)
@@ -166,7 +172,7 @@ def get_alpha(model1_path,model2_path,temp,options):
   print(val)
   print(alphaval)
 
-def generate_seq(net, eng, max_seq_len, seed_text, n_words):
+def generate_seq(net, eng, max_seq_len, seed_text, n_words,topk):
   import pandas as pd
   import copy
   df=pd.DataFrame({'sentence':[],'topk':[]})
@@ -191,7 +197,7 @@ def generate_seq(net, eng, max_seq_len, seed_text, n_words):
       # print(encoded[0][1])
       yhat =net(torch.unsqueeze(encoded[0][0],dim=0))
 #       print(yhat[options['max_seq_len']-1].shape)
-      values,indices=(torch.topk(yhat[options['max_seq_len']-1],5))
+      values,indices=(torch.topk(yhat[options['max_seq_len']-1],topk))
       # print(yhat[:options['max_seq_len'],:])
       
       ind=torch.argmax(yhat[:options['max_seq_len'],:],dim=1)
@@ -218,6 +224,63 @@ def generate_seq(net, eng, max_seq_len, seed_text, n_words):
 #       print(in_text)
       
       options['max_seq_len']+=1
+#   print(df['sentence'].to_markdown(index=False))
+  print(df.to_markdown(index=False))
+  return ' '.join(result)
+
+def generate_seq_multiple(net, eng, max_seq_len, seed_text, n_words,topk,algo_list):
+  import pandas as pd
+  import copy
+  df=pd.DataFrame({'fedavg':[],'apfl':[],'independent':[]})
+#   temp={'sentence':"hi",'topk':'there'}
+# df=df.append(temp,ignore_index=True)
+  result = []
+  in_text = seed_text
+#   print(in_text)
+#   options={}
+  options['batch_size']=1
+  options['max_seq_len']=max_seq_len
+  # max_seq_len=3
+  # generate a fixed number of words
+  net.eval()
+  with torch.no_grad():
+    for _ in range(n_words):
+      # encode the text as integer
+      encoded = stream_load(eng,in_text,options)
+      # truncate sequences to a fixed length
+      # predict probabilities for each word
+      # print(encoded[0][0])
+      # print(encoded[0][1])
+      yhat =net(torch.unsqueeze(encoded[0][0],dim=0))
+#       print(yhat[options['max_seq_len']-1].shape)
+      values,indices=(torch.topk(yhat[options['max_seq_len']-1],topk))
+      # print(yhat[:options['max_seq_len'],:])
+      
+      ind=torch.argmax(yhat[:options['max_seq_len'],:],dim=1)
+
+      out_word=eng.index2word[ind[-1].item()]
+      out_words=[eng.index2word[index.item()] for index in indices] 
+#       print(values)
+#       print("top k suggestions")
+      
+#       print(out_words)
+      preds=""
+      for idx,word in enumerate(out_words):
+        preds=preds +" "+word+" : "+str(round(values[idx].item(),2) )+","
+#             print(word+" : "+str(round(values[idx].item(),2) ),end=',')
+      # append to input
+      temp={'sentence':copy.deepcopy(in_text),'topk':preds}
+      df=df.append(temp,ignore_index=True)  
+      if out_words[0]=='<unk>':
+          in_text[0]+=' '+out_words[1]
+          result.append(out_words[1])
+      else:      
+          in_text[0]+=' '+out_words[0]
+          result.append(out_words[0])
+#       print(in_text)
+      
+      options['max_seq_len']+=1
+#   print(df['sentence'].to_markdown(index=False))
   print(df.to_markdown(index=False))
   return ' '.join(result)
 
@@ -321,7 +384,7 @@ def get_loss(sent,net,options,temp):
 def main(argv):
 #     print(argv)
     try:
-      opts, args = getopt.getopt(argv,"s:l:p:t:",["string=","length=","predwords=","typ="])
+      opts, args = getopt.getopt(argv,"s:l:p:t:a:q:k:",["string=","length=","predwords=","typ=",'algo=','quantized=','topk='])
     except getopt.GetoptError:
       print ('test.py -i <inputfile> -o <outputfile>')
       sys.exit(2)
@@ -339,9 +402,16 @@ def main(argv):
             generate_words=int(arg)
         elif opt in ("-t","--typ"):
             model_dir=arg.split()
+        elif opt in ("-a","--algo"):
+            algo=arg
+        elif opt in ("-q","--quantized"):
+            quantisation=bool(int(arg))
+        elif opt in ("-k","--topk"):
+            topk=int(arg)
 #             model_dir=list(" ".join(word for word in arg.split()))
 #     print(model_dir)    
 #     model_dir='movie'
+    print(topk)
     options['batch_size']=32
     options['max_seq_len']=40
     options['num_lstm_layers']=1
@@ -360,7 +430,9 @@ def main(argv):
     options['vocab_size']=temp.n_words
 
 #     get_loss(sent[0],net,options,temp)
+    algo_list=['apfl','independent','fedavg']
     gen_sequence=1
+    print("Algorithm Used for Training", algo.upper())
     if gen_sequence==1:
         sents=sent
         # sent='Hi , my name is john .'
@@ -369,19 +441,28 @@ def main(argv):
         ubuntu_cleaned=[remove_extra_whitespace_tabs(sent) for sent in normalized_sents]
         # ubuntu_cleaned2=[expand_contractions(sent) for sent in ubuntu_cleaned]
         ubuntu_cleaned_sents=[" ".join(w for w in sent.split(" ")) for sent in ubuntu_cleaned]
-
+        
         for mode in model_dir:
-            model_file='./'+mode+'/_model_best.pt'
-            net=Model(options,temp.embeddings)
-            if torch.cuda.is_available:
-                device=torch.device("cuda")
+            if algo=='independent':
+                model_file='./'+mode+'/_model_best.pt'
+            elif algo=='gapfl':
+                model_file='./apfl_'+mode+'_model.pt'
             else:
-                device=torch.device("cpu")
-            net.load_state_dict(torch.load(model_file,map_location=torch.device('cuda')))
-            net=net.double()
+                model_file='./fedavg_model.pt'
+            net=Model(options,temp.embeddings)
+
+#             if torch.cuda.is_available:
+#                 device=torch.device("cuda:3")
+#             else:
+            device=torch.device("cpu")
+            net.load_state_dict(torch.load(model_file,map_location=device))
+#             net=net.double()
+            if quantisation:
+                net = torch.quantization.quantize_dynamic(net, {nn.LSTM, nn.Linear}, dtype=torch.qint8)
+#             print_size_of_model(net)
             copied=copy.deepcopy(ubuntu_cleaned_sents)
             print("Model:"+mode)
-            _=generate_seq(net,temp,cur_sent_length,copied,generate_words)
+            _=generate_seq(net,temp,cur_sent_length,copied,generate_words,topk)
 
 if __name__=="__main__":
     main(sys.argv[1:])

@@ -247,6 +247,7 @@ def train_func(arr_sents,val_sents,scheduler,opt,min_val_loss,options):
     #main training loop
     device=options['device']
     validation_loss_values=[]
+    train_loss_values=[]
     for epc in range(options['epochs']):
         trainloader=DataLoader(arr_sents,batch_size=options['batch_size'],shuffle=True)
         n_totals=0
@@ -270,13 +271,14 @@ def train_func(arr_sents,val_sents,scheduler,opt,min_val_loss,options):
             loss=criterion(out,targs.long())
             loss.backward()
             print(loss.item())
+            train_loss_values.append(loss.item())
             n_loss+=loss.item()
             n_totals+=inp.shape[0]
             opt.step()
             avg_loss=n_loss/(batch_idx+1)
 
             if (batch_idx+1) %options['steps_for_validation']==0:
-                val_loss=val_func(val_sents)
+                val_loss=val_func(val_sents,options)
                 net.train()
                 logger.info("After "+str(batch_idx+1)+" steps Training Avg_loss "+str(n_loss/(batch_idx+1))+"Training Avg_perplexity "+str(math.exp(n_loss/(batch_idx+1)))+" "+ "Validation Avg_loss "+str(val_loss)+"Validation Avg_perplexity "+str(math.exp(val_loss)))
                 #setting weight decay for the larger datasets
@@ -293,7 +295,7 @@ def train_func(arr_sents,val_sents,scheduler,opt,min_val_loss,options):
 
         avg_loss=n_loss/(batch_idx+1)
         logger.info("Epoch "+str(epc+1))
-        val_loss=val_func(val_sents)
+        val_loss=val_func(val_sents,options)
         net.train()
         # norm_calc(net)
 
@@ -324,6 +326,7 @@ def train_func(arr_sents,val_sents,scheduler,opt,min_val_loss,options):
         with open(val_file,'w') as fp:
             for lvalue in validation_loss_values:
                 fp.write(str(lvalue)+"\n")
+        return train_loss_values,val_loss_values
 
 def val_func(val_sents,options):
     """
@@ -440,8 +443,8 @@ def model_setup(options,arr_sents,val_sents,eng):
         if data_as_stream==0:
             train_func_pad(scheduler,opt,min_val_loss,options)
         else:
-            train_func(arr_sents,val_sents,scheduler,opt,min_val_loss,options)
-    
+            train_loss_values,val_loss_values=train_func(arr_sents,val_sents,scheduler,opt,min_val_loss,options)
+    return train_loss_values,val_loss_values
 #     if do_eval==1:
 #         if data_as_stream==0:
 #             test_func_pad()
@@ -661,6 +664,7 @@ def jumble_sent(data,jumbles):
     return jumbled_data
 
 def data_preprocess(options,name,match=None):
+    print(options)
     if 'jumbled' not in options:
         options['jumbled']=""
     print("Inside here")
@@ -787,6 +791,8 @@ def get_data_lists(options):
     return data,val_data
 
 def train_independently(options,train_data,val_data,eng_obj):
+    train_loss=[]
+    val_loss=[]
     for ind in range(0,len(data_list),1):
         options['run_name']=data_list[ind][0]
         options['match']=data_list[ind][1]
@@ -795,8 +801,11 @@ def train_independently(options,train_data,val_data,eng_obj):
         train_sents,val_sents=train_data[ind],val_data[ind]
         num_train_samples=52000
         sample_ds = Subset(train_sents, np.arange(num_train_samples))
-        model_setup(options,sample_ds,val_sents,eng_obj)
+        train,val=model_setup(options,sample_ds,val_sents,eng_obj)
         logger.remove(logobj)   
+        train_loss.append(train)
+        val_loss.append(val)
+    return train_loss,val_loss
 
 # if __name__=="__main__":
 #     options={}

@@ -1,4 +1,5 @@
 # graph-federated-learning
+
 Implementation  of graph based adaptive federated learning , federated averaging on the conversational datasets.
 The problem of next word prediction is considered.
 ![This is a alt text.](/FL_problem.png " Text Prediction ")
@@ -10,7 +11,57 @@ We assume that there is no data sharing and only the model parameters that are s
 
 The setup looks like this -
 
-![This is a alt text.](/graph.png " Setup of Graph")
+![This is a alt text.](/FL_setup.png " Setup of Graph ")
+
+## Federated Learning
+
+Federated Learning is a machine learning paradigm involving decentralized learning across
+multiple edge devices with objective of learning a common model with the constraints of data
+privacy and on device learning. Typically there is an orchestrator(server) and a set of clients
+where the data resides on the clients and the orchestrator broadcasts the model parameters to all
+the clients who perform the calculations independently on their local data and share the model
+parameters back. The orchestrator does the aggregation of the weight parameters received from
+the dierent clients. The aggregation may be a simple vanilla averaging or a weighted averaging
+based on the  flavour of algorithm being used.
+
+![This is a alt text.](/FL_1.png " Federated Learning ")
+
+## Personalization in Federated Learning
+
+The traditional federated learning algorithms aim to learn a common model with the assumption that the data across the devices is IID. 
+
+![equation](https://latex.codecogs.com/gif.latex?%5Cmin%20_%7Bw%20%5Cin%20%5Cmathbb%7BR%7D%5E%7Bd%7D%7D%5Cleft%5C%7Bf%28w%29%3A%3D%5Cfrac%7B1%7D%7BN%7D%20%5Csum_%7Bi%3D1%7D%5E%7BN%7D%20f_%7Bi%7D%28w%29%5Cright%5C%7D)
+
+There are different algorithms which work on the personalization aspect by solving a variant of this problem.
+In pFedme , the same is modified to 
+
+![equation](https://latex.codecogs.com/gif.latex?%5Cmin%20_%7B%5Cboldsymbol%7B%5Ctheta_%7Bi%7D%7D%20%5Cin%20%5Cmathbb%7BR%7D%5E%7Bd%7D%7D%28%20f_%7Bi%7D%5Cleft%28%5Ctheta_%7Bi%7D%5Cright%29&plus;%5Cfrac%7B%5Clambda%7D%7B2%7D%5Cleft%5C%7C%5Ctheta_%7Bi%7D-w%5Cright%5C%7C%5E%7B2%7D%29).
+
+![This is a alt text.](/pfedme.png " Federated Learning ")
+
+
+
+In apfl, the personalization problem is modified to 
+
+![equation](https://latex.codecogs.com/gif.latex?%5Cmin%20_%7B%5Cboldsymbol%7Bv%7D%20%5Cin%20%5Cmathbb%7BR%7D%5E%7Bd%7D%7D%20f_%7Bi%7D%5Cleft%28%5Calpha_%7Bi%7D%20%5Cboldsymbol%7Bv%7D&plus;%5Cleft%281-%5Calpha_%7Bi%7D%5Cright%29%20%5Cboldsymbol%7Bw%7D%5E%7B*%7D%5Cright%29)
+
+![This is a alt text.](/apfl_algo.png " Federated Learning ")
+
+
+for  each client **i** where *v* is the private model at  client i and *w* is the global copy.
+
+## Proposed Algorithm
+
+To learn a personalized model for each of the client in the graph based setup we proposed, we
+modify the apfl algorithm to a graph based variant(gap). The key difference is that the mixture
+weights are now learnt between every client and each of its neighbours. The personalized
+model for a client is also modified to be a weighted combination of its own private model and
+the global model of all its neighbours. The personalized model of the client i becomes -
+
+![equation](https://latex.codecogs.com/gif.latex?%5Coverline%7B%5Cboldsymbol%7Bv%7D%7D_%7Bi%7D%5E%7B%28t%29%7D%3D%5Csum_%7Bj%20%5Cin%20%5Bneigbors%28i%29%5D%7D%20%28%5Calpha_%7Bij%7D/d%28i%29%29%20%5Cboldsymbol%7Bv%7D_%7Bi%7D%5E%7B%28t%29%7D&plus;%5Cleft%28%281-%5Calpha_%7Bij%7D%5Cright%29/d%28i%29%29%20%5Cboldsymbol%7Bw%7D_%7Bj%7D%5E%7B%28t%29%7D)
+
+
+![This is a alt text.](/FL_gapfl.png " Federated Learning ")
 
 
 ## Datasets
@@ -66,8 +117,8 @@ For gapfl , set the **init_alpha** and **alpha_lr** parameters to initialize the
 
 To do inference make use of the Language_modelling_inference_colab.py file. Same can be run as -
 
-```python Language_modelling_inference_colab.py -s ' How re   ' -l 2 -p 3 -t 'euro word_pred supreme Taskmaster movie'  ```
-where -s parameter specifies the sentence, l parameter sets the sentence length, p is for the number of words to predict, t is a string of space separated datasets on which the personalized models have been trained. 
+```python Language_modelling_inference_colab.py -s ' How re   ' -l 2 -p 3 -t 'euro word_pred supreme Taskmaster movie' -a 'fedavg' -q 1 -k 2  ```
+where s parameter specifies the sentence, l parameter sets the sentence length, p is for the number of next words to predict, t is a string of space separated datasets on which the personalized models have been trained, a stands for algorithms 'fedavg','independent','gapfl', q stands for quantisation parameter on the saved model, k is the number of top k predictions to predict for a single timestep. 
 
 To compare the similarity of the two corpuses, set the dataset1 and datasets 2 lists in the language_model_similarity.py file. The same should be defined in the get_sents function in the Language_model_training_colab.py file. Run
 

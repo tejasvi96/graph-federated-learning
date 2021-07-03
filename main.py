@@ -13,7 +13,7 @@ import hydra
 from loguru import logger
 
 from language_modelling_setup import *
-from gapfl import *
+from apfl_ours import *
 from fedavg import *
 logger.add("logs_file.log")
 
@@ -53,13 +53,14 @@ def configsetters(cfg):
     options['load_model']=cfg.main.load_model
     options['load_model_file']=cfg.main.load_model_file
     options['epochs']=cfg.main.epochs
+    options['algorithm']=fed_algorithm
     data_lists=[(i,None) for i in cfg.main.run_name.split()]
     print(data_lists)
 #     data_list=[('supreme',None),('movie',None),('word_pred',None),('Taskmaster',None),('euro',None)]
     
     options['device_id']=cfg.main.device_id
     options['device']=torch.device("cpu")
-    if torch.cuda.is_available and options['use_cuda']!=0:
+    if torch.cuda.is_available and options['device_id']!=-1:
         options['device']=torch.device("cuda:"+str(options['device_id']))
     print(master_path)
     if do_env_setup:
@@ -88,13 +89,26 @@ def training(fed_algorithm,params,options,master_path,data_lists):
     if fed_algorithm == 'fedavg':
         Algo=fedavg(params,options,train_data,val_data,eng_obj)
         lossValues,val_loss=Algo.model_train()
+        train_loss_array=np.array(lossValues)
+        val_loss_array=np.array(val_loss)
     elif fed_algorithm == 'gapfl':
         Algo=gapfl(params,options,train_data,val_data,eng_obj,params['init_alpha'],data_lists)
         lossValues,val_loss=Algo.model_train()
-    if fed_algorithm == 'independent':
-        train_independently(options,train_data,val_data,eng_obj)
+        train_loss_array=np.array(lossValues)
+        val_loss_array=np.array(val_loss)
+    elif fed_algorithm == 'independent':
+        lossValues,val_loss=train_independently(options,train_data,val_data,eng_obj)
+        
+        val_loss_array=np.array(val_loss)
+        val_loss_array=val_loss_array.sum(axis=0)/val_loss_array.shape[0]
+        
+        train_loss_array=np.array(lossValues)
+        train_loss_array=train_loss_array.sum(axis=0)/train_loss_array.shape[0]
         print('independently')
     else:
         print("Not implemented algo")
+        val_loss_array=train_loss_array=None
+    print(train_loss_array)
+    print(val_loss_array)
 if __name__=="__main__":
     configsetters()
