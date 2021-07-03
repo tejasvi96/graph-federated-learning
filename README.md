@@ -61,7 +61,7 @@ the global model of all its neighbours. The personalized model of the client i b
 ![equation](https://latex.codecogs.com/gif.latex?%5Coverline%7B%5Cboldsymbol%7Bv%7D%7D_%7Bi%7D%5E%7B%28t%29%7D%3D%5Csum_%7Bj%20%5Cin%20%5Bneigbors%28i%29%5D%7D%20%28%5Calpha_%7Bij%7D/d%28i%29%29%20%5Cboldsymbol%7Bv%7D_%7Bi%7D%5E%7B%28t%29%7D&plus;%5Cleft%28%281-%5Calpha_%7Bij%7D%5Cright%29/d%28i%29%29%20%5Cboldsymbol%7Bw%7D_%7Bj%7D%5E%7B%28t%29%7D)
 
 
-![This is a alt text.](/FL_gapfl.png " Federated Learning ")
+![This is a alt text.](/FL_gapfl.PNG " Federated Learning ")
 
 
 ## Datasets
