@@ -100,13 +100,13 @@ def one_time(master_path,vocab_file):
 def env_setup(master_path,vocab_file):
 #     master_path=os.getcwd()
 #     master_path='/content/drive/MyDrive/'
-    os.system('pip install -r '+master_path+'requirements.txt')
+    # os.system('pip install -r '+master_path+'requirements.txt')
     os.system('pip install pytorch-nlp')
     os.system('apt install openjdk-8-jdk')
 # nnAA
-    os.system('update-alternatives --set java /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java')
-    os.system('pip install language-check')
-    os.system('pip install pycontractions')
+    # os.system('update-alternatives --set java /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java')
+    # os.system('pip install language-check')
+    #os.system('pip install pycontractions')
     one_time(master_path,vocab_file)
 
 # if __name__=="__main__":

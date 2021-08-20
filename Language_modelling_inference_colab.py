@@ -225,7 +225,8 @@ def generate_seq(net, eng, max_seq_len, seed_text, n_words,topk):
       
       options['max_seq_len']+=1
 #   print(df['sentence'].to_markdown(index=False))
-  print(df.to_markdown(index=False))
+  print(df)
+  #print(df.to_markdown(index=False))
   return ' '.join(result)
 
 def generate_seq_multiple(net, eng, max_seq_len, seed_text, n_words,topk,algo_list):
@@ -281,7 +282,8 @@ def generate_seq_multiple(net, eng, max_seq_len, seed_text, n_words,topk,algo_li
       
       options['max_seq_len']+=1
 #   print(df['sentence'].to_markdown(index=False))
-  print(df.to_markdown(index=False))
+  print(df)
+  #print(df.to_markdown(index=False))
   return ' '.join(result)
 
 def stream_load(eng,sents,options):
@@ -382,15 +384,16 @@ def get_loss(sent,net,options,temp):
 
     
 def main(argv):
-#     print(argv)
+    print(argv)
     try:
-      opts, args = getopt.getopt(argv,"s:l:p:t:a:q:k:",["string=","length=","predwords=","typ=",'algo=','quantized=','topk='])
+      opts, args = getopt.getopt(argv,"s:l:p:t:a:q:k:j:",["string=","length=","predwords=","typ=",'algo=','quantized=','topk=','path='])
     except getopt.GetoptError:
       print ('test.py -i <inputfile> -o <outputfile>')
       sys.exit(2)
 #     print(opts)
+    master_path=os.getcwd()
     for opt, arg in opts:
-#         print(opt,arg)
+        print(opt,arg)
         if opt == '-h':
             print ('test.py -i <inputfile> -o <outputfile>')
             sys.exit()
@@ -408,10 +411,12 @@ def main(argv):
             quantisation=bool(int(arg))
         elif opt in ("-k","--topk"):
             topk=int(arg)
+        elif opt in ("-j","--path"):
+            master_path=arg
 #             model_dir=list(" ".join(word for word in arg.split()))
 #     print(model_dir)    
 #     model_dir='movie'
-    print(topk)
+    print(master_path)
     options['batch_size']=32
     options['max_seq_len']=40
     options['num_lstm_layers']=1
@@ -424,7 +429,7 @@ def main(argv):
     options['epochs']=1
     options['steps_for_validation']=500
     
-    file_path='./embedding_class_corrected.pt'
+    file_path=master_path+'\\embedding_class_corrected.pt'
     picklefile = open(file_path, 'rb')
     temp=pickle.load(picklefile)
     options['vocab_size']=temp.n_words
@@ -444,11 +449,11 @@ def main(argv):
         
         for mode in model_dir:
             if algo=='independent':
-                model_file='./'+mode+'/_model_best.pt'
+                model_file=master_path+mode+'\\_model_best.pt'
             elif algo=='gapfl':
-                model_file='./apfl_'+mode+'_model.pt'
+                model_file=master_path+'\\apfl_'+mode+'_model.pt'
             else:
-                model_file='./fedavg_model.pt'
+                model_file=master_path+'\\fedavg_model.pt'
             net=Model(options,temp.embeddings)
 
 #             if torch.cuda.is_available:

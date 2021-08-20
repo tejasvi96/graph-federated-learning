@@ -221,7 +221,7 @@ def norm_calc(model):
         param_norm = p.grad.data.norm(2)
         total_norm += param_norm.item() ** 2
     total_norm = total_norm ** (1. / 2)
-    print("Gradient norm "+str(total_norm))
+    logger.info("Gradient norm "+str(total_norm))
 
 def train_func(arr_sents,val_sents,scheduler,opt,min_val_loss,options):
 
@@ -271,6 +271,7 @@ def train_func(arr_sents,val_sents,scheduler,opt,min_val_loss,options):
             loss=criterion(out,targs.long())
             loss.backward()
             print(loss.item())
+            
             train_loss_values.append(loss.item())
             n_loss+=loss.item()
             n_totals+=inp.shape[0]
@@ -341,7 +342,7 @@ def val_func(val_sents,options):
     # to make the training faster if a large validation set is there then restricting the datalength to be used
     # val_factor is a config parameter (0 to 1)
     n=int(len(val_sents)*val_factor)
-    print(n)
+    logger.info(str(n)+" sents used for validation")
     # setting the model in eval mode
     net.eval()
     device=options['device']
@@ -577,7 +578,7 @@ def get_sents(options,name):
     elif name=='euro':
         temp=get_eurodata()
     else:
-        print("Not found",name)
+        logger.info("Not found ",name)
         return "",""
 #     return temp
     normalized_sents=[normalizeString(sent) for sent in temp]
@@ -632,7 +633,8 @@ def get_sents(options,name):
 
     #todo
     # threshold parameter can be used here to cap the number of sentences
-    print(ubuntu_cleaned_sents[:10])
+    logger.info("Some sentences:")
+    logger.info(ubuntu_cleaned_sents[:5])
     split_factor=0.95
     split_index=int(split_factor*len(ubuntu_cleaned_sents))
     train_sents=ubuntu_cleaned_sents[:split_index]
@@ -664,21 +666,21 @@ def jumble_sent(data,jumbles):
     return jumbled_data
 
 def data_preprocess(options,name,match=None):
-    print(options)
     if 'jumbled' not in options:
         options['jumbled']=""
-    print("Inside here")
+    
     if match is None:
         match=""
     train_loaded_file=options['master_path']+options['run_name']+"/"+'train_data_'+match+options['jumbled']+'.pt'
-    print(train_loaded_file)
+    
     val_loaded_file=options['master_path']+options['run_name']+"/"+'val_data_'+match+options['jumbled']+'.pt'
     if os.path.exists(train_loaded_file):
         train_sents=torch.load(train_loaded_file)
+        logger.info("loaded "+train_loaded_file)
         if os.path.exists(val_loaded_file):
             val_sents=torch.load(val_loaded_file)
         else:
-            print('val_file not found')
+            logger.info('val_file not found')
             val_sents=None
         return train_sents,val_sents
     if name=='ubuntu':
@@ -696,7 +698,7 @@ def data_preprocess(options,name,match=None):
     elif name=='euro':
         temp=get_eurodata()
     else:
-        print("NEw dataset not found",name)
+        logger.info("New dataset not found",name)
 #     return temp
     normalized_sents=[normalizeString(sent) for sent in temp]
     # arr_sents=stream_load(normalized_sents,ubuntu_eng)
@@ -750,12 +752,13 @@ def data_preprocess(options,name,match=None):
 
     #todo
     # threshold parameter can be used here to cap the number of sentences
-    print(ubuntu_cleaned_sents[:10])
+    # print(ubuntu_cleaned_sents[:10])
     if options['jumbled']!='':
-        print("jumbled case")
+        logger.info("jumbled")
+       
 #         was 4 earlier
         ubuntu_cleaned_sents=jumble_sent(ubuntu_cleaned_sents,jumbles=8)
-        print(ubuntu_cleaned_sents[:10])
+        # print(ubuntu_cleaned_sents[:10])
     split_factor=0.95
     split_index=int(split_factor*len(ubuntu_cleaned_sents))
     train_sents=ubuntu_cleaned_sents[:split_index]

@@ -1,4 +1,4 @@
-import urllib
+import urllib.request
 import os
 urllib.request.urlretrieve('http://dataset.cs.mcgill.ca/ubuntu-corpus-1.0/ubuntu_dialogs.tgz', "ubuntu_dialogs.tqz")
 urllib.request.urlretrieve('http://www.cs.cornell.edu/~cristian/data/cornell_movie_dialogs_corpus.zip', "cornell_movie_dialogs_corpus.zip")

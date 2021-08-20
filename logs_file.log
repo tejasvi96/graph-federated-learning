@@ -1,0 +1,58 @@
+2021-08-20 18:33:59.365 | INFO     | __main__:configsetters:58 - [('supreme', None), ('word_pred', None), ('Taskmaster', None), ('euro', None), ('movie', None)]
+2021-08-20 18:34:00.286 | INFO     | Language_modelling_training_colab:data_preprocess:679 - loaded D:\iisc\FL\graph-federated-learning\supreme/train_data_.pt
+2021-08-20 18:34:05.145 | INFO     | Language_modelling_training_colab:data_preprocess:679 - loaded D:\iisc\FL\graph-federated-learning\word_pred/train_data_.pt
+2021-08-20 18:34:06.486 | INFO     | Language_modelling_training_colab:data_preprocess:679 - loaded D:\iisc\FL\graph-federated-learning\Taskmaster/train_data_.pt
+2021-08-20 18:34:07.945 | INFO     | Language_modelling_training_colab:data_preprocess:679 - loaded D:\iisc\FL\graph-federated-learning\euro/train_data_.pt
+2021-08-20 18:34:09.645 | INFO     | Language_modelling_training_colab:data_preprocess:679 - loaded D:\iisc\FL\graph-federated-learning\movie/train_data_.pt
+2021-08-20 18:34:09.805 | INFO     | papfl:__init__:28 - {'num_lstm_layers': 1, 'steps_for_validation': 10, 'hid_size': 300, 'learning_rate': 0.01, 'dropout': 0.1, 'weight_decay_factor': 0.5, 'min_learning_rate': 0.0001, 'master_path': 'D:\\iisc\\FL\\graph-federated-learning\\', 'max_seq_len': 40, 'batch_size': 128, 'alpha_lr': 1.0, 'load_model': 0, 'load_model_file': 0, 'epochs': 1, 'algorithm': 'papfl', 'device_id': 0, 'device': device(type='cuda', index=0), 'vocab_size': 9902, 'run_name': 'movie', 'jumbled': ''}
+2021-08-20 18:34:11.616 | INFO     | papfl:model_train:183 - -------------------------
+2021-08-20 18:34:11.616 | INFO     | papfl:model_train:184 - Round:
+2021-08-20 18:34:11.624 | INFO     | papfl:model_train:185 - -------------------------
+2021-08-20 18:35:21.581 | INFO     | papfl:model_train:183 - -------------------------
+2021-08-20 18:35:21.594 | INFO     | papfl:model_train:184 - Round:
+2021-08-20 18:35:21.594 | INFO     | papfl:model_train:185 - -------------------------
+2021-08-20 18:35:45.365 | INFO     | __main__:configsetters:58 - [('supreme', None), ('word_pred', None), ('Taskmaster', None), ('euro', None), ('movie', None)]
+2021-08-20 18:35:45.374 | INFO     | __main__:configsetters:68 - cuda:0
+2021-08-20 18:35:46.708 | INFO     | Language_modelling_training_colab:data_preprocess:679 - loaded D:\iisc\FL\graph-federated-learning\supreme/train_data_.pt
+2021-08-20 18:35:51.984 | INFO     | Language_modelling_training_colab:data_preprocess:679 - loaded D:\iisc\FL\graph-federated-learning\word_pred/train_data_.pt
+2021-08-20 18:35:53.405 | INFO     | Language_modelling_training_colab:data_preprocess:679 - loaded D:\iisc\FL\graph-federated-learning\Taskmaster/train_data_.pt
+2021-08-20 18:35:55.196 | INFO     | Language_modelling_training_colab:data_preprocess:679 - loaded D:\iisc\FL\graph-federated-learning\euro/train_data_.pt
+2021-08-20 18:35:56.974 | INFO     | Language_modelling_training_colab:data_preprocess:679 - loaded D:\iisc\FL\graph-federated-learning\movie/train_data_.pt
+2021-08-20 18:35:57.225 | INFO     | papfl:__init__:28 - {'num_lstm_layers': 1, 'steps_for_validation': 10, 'hid_size': 300, 'learning_rate': 0.01, 'dropout': 0.1, 'weight_decay_factor': 0.5, 'min_learning_rate': 0.0001, 'master_path': 'D:\\iisc\\FL\\graph-federated-learning\\', 'max_seq_len': 40, 'batch_size': 128, 'alpha_lr': 1.0, 'load_model': 0, 'load_model_file': 0, 'epochs': 1, 'algorithm': 'papfl', 'device_id': 0, 'device': device(type='cuda', index=0), 'vocab_size': 9902, 'run_name': 'movie', 'jumbled': ''}
+2021-08-20 18:35:58.985 | INFO     | papfl:model_train:183 - -------------------------
+2021-08-20 18:35:58.986 | INFO     | papfl:model_train:184 - Round:
+2021-08-20 18:35:58.986 | INFO     | papfl:model_train:185 - -------------------------
+2021-08-20 18:37:15.185 | INFO     | papfl:model_train:183 - -------------------------
+2021-08-20 18:37:15.185 | INFO     | papfl:model_train:184 - Round:
+2021-08-20 18:37:15.195 | INFO     | papfl:model_train:185 - -------------------------
+2021-08-20 18:37:37.606 | INFO     | papfl:model_train:183 - -------------------------
+2021-08-20 18:37:37.606 | INFO     | papfl:model_train:184 - Round:
+2021-08-20 18:37:37.606 | INFO     | papfl:model_train:185 - -------------------------
+2021-08-20 18:37:59.556 | INFO     | papfl:model_train:183 - -------------------------
+2021-08-20 18:37:59.556 | INFO     | papfl:model_train:184 - Round:
+2021-08-20 18:37:59.556 | INFO     | papfl:model_train:185 - -------------------------
+2021-08-20 18:38:22.148 | INFO     | papfl:model_train:183 - -------------------------
+2021-08-20 18:38:22.152 | INFO     | papfl:model_train:184 - Round:
+2021-08-20 18:38:22.152 | INFO     | papfl:model_train:185 - -------------------------
+2021-08-20 18:42:06.864 | INFO     | __main__:configsetters:58 - [('supreme', None), ('word_pred', None), ('Taskmaster', None), ('euro', None), ('movie', None)]
+2021-08-20 18:42:06.864 | INFO     | __main__:configsetters:68 - cuda:0
+2021-08-20 18:42:08.006 | INFO     | Language_modelling_training_colab:data_preprocess:679 - loaded D:\iisc\FL\graph-federated-learning\supreme/train_data_.pt
+2021-08-20 18:42:12.995 | INFO     | Language_modelling_training_colab:data_preprocess:679 - loaded D:\iisc\FL\graph-federated-learning\word_pred/train_data_.pt
+2021-08-20 18:42:13.965 | INFO     | Language_modelling_training_colab:data_preprocess:679 - loaded D:\iisc\FL\graph-federated-learning\Taskmaster/train_data_.pt
+2021-08-20 18:42:14.004 | INFO     | Language_modelling_training_colab:data_preprocess:679 - loaded D:\iisc\FL\graph-federated-learning\euro/train_data_.pt
+2021-08-20 18:42:14.055 | INFO     | Language_modelling_training_colab:data_preprocess:679 - loaded D:\iisc\FL\graph-federated-learning\movie/train_data_.pt
+2021-08-20 18:42:14.055 | INFO     | papfl:__init__:28 - {'num_lstm_layers': 1, 'steps_for_validation': 10, 'hid_size': 300, 'learning_rate': 0.01, 'dropout': 0.1, 'weight_decay_factor': 0.5, 'min_learning_rate': 0.0001, 'master_path': 'D:\\iisc\\FL\\graph-federated-learning\\', 'max_seq_len': 40, 'batch_size': 128, 'alpha_lr': 1.0, 'load_model': 0, 'load_model_file': 0, 'epochs': 1, 'algorithm': 'papfl', 'device_id': 0, 'device': device(type='cuda', index=0), 'vocab_size': 9902, 'run_name': 'movie', 'jumbled': ''}
+2021-08-20 18:42:15.716 | INFO     | papfl:model_train:183 - -------------------------
+2021-08-20 18:42:15.716 | INFO     | papfl:model_train:184 - Round:
+2021-08-20 18:42:15.720 | INFO     | papfl:model_train:185 - -------------------------
+2021-08-20 18:43:24.619 | INFO     | papfl:model_train:183 - -------------------------
+2021-08-20 18:43:24.623 | INFO     | papfl:model_train:184 - Round:
+2021-08-20 18:43:24.623 | INFO     | papfl:model_train:185 - -------------------------
+2021-08-20 23:35:00.258 | INFO     | __main__:configsetters:58 - [('supreme', None), ('word_pred', None), ('Taskmaster', None), ('euro', None), ('movie', None)]
+2021-08-20 23:35:00.281 | INFO     | __main__:configsetters:68 - cuda:0
+2021-08-20 23:35:01.296 | INFO     | Language_modelling_training_colab:data_preprocess:679 - loaded D:\iisc\FL\graph-federated-learning\supreme/train_data_.pt
+2021-08-20 23:35:06.513 | INFO     | Language_modelling_training_colab:data_preprocess:679 - loaded D:\iisc\FL\graph-federated-learning\word_pred/train_data_.pt
+2021-08-20 23:35:07.945 | INFO     | Language_modelling_training_colab:data_preprocess:679 - loaded D:\iisc\FL\graph-federated-learning\Taskmaster/train_data_.pt
+2021-08-20 23:35:09.607 | INFO     | Language_modelling_training_colab:data_preprocess:679 - loaded D:\iisc\FL\graph-federated-learning\euro/train_data_.pt
+2021-08-20 23:35:11.602 | INFO     | Language_modelling_training_colab:data_preprocess:679 - loaded D:\iisc\FL\graph-federated-learning\movie/train_data_.pt
+2021-08-20 23:35:11.873 | INFO     | papfl:__init__:28 - {'num_lstm_layers': 1, 'steps_for_validation': 10, 'hid_size': 300, 'learning_rate': 0.01, 'dropout': 0.1, 'weight_decay_factor': 0.5, 'min_learning_rate': 0.0001, 'master_path': 'D:\\iisc\\FL\\graph-federated-learning\\', 'max_seq_len': 40, 'batch_size': 128, 'alpha_lr': 1.0, 'load_model': 0, 'load_model_file': 0, 'epochs': 1, 'algorithm': 'papfl', 'device_id': 0, 'device': device(type='cuda', index=0), 'vocab_size': 9902, 'run_name': 'movie', 'jumbled': ''}
