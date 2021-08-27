@@ -391,7 +391,7 @@ def main(argv):
       print ('test.py -i <inputfile> -o <outputfile>')
       sys.exit(2)
 #     print(opts)
-    master_path=os.getcwd()
+    master_path='/content/drive/MyDrive/graph/'
     for opt, arg in opts:
         print(opt,arg)
         if opt == '-h':
@@ -429,7 +429,7 @@ def main(argv):
     options['epochs']=1
     options['steps_for_validation']=500
     
-    file_path=master_path+'\\embedding_class_corrected.pt'
+    file_path=master_path+'embedding_class_corrected.pt'
     picklefile = open(file_path, 'rb')
     temp=pickle.load(picklefile)
     options['vocab_size']=temp.n_words
@@ -449,11 +449,15 @@ def main(argv):
         
         for mode in model_dir:
             if algo=='independent':
-                model_file=master_path+mode+'\\_model_best.pt'
+                model_file=master_path+mode+'_model_best.pt'
             elif algo=='gapfl':
-                model_file=master_path+'\\apfl_'+mode+'_model.pt'
+                model_file=master_path+'gapfl_'+mode+'_model.pt'
+            elif algo=='apfl':
+                model_file=master_path+'apfl_'+mode+'_model.pt'
+            elif algo=='papfl':
+                model_file=master_path+'papfl_'+mode+'_model.pt'
             else:
-                model_file=master_path+'\\fedavg_model.pt'
+                model_file=master_path+'fedavg_model.pt'
             net=Model(options,temp.embeddings)
 
 #             if torch.cuda.is_available:

@@ -56,3 +56,106 @@
 2021-08-20 23:35:09.607 | INFO     | Language_modelling_training_colab:data_preprocess:679 - loaded D:\iisc\FL\graph-federated-learning\euro/train_data_.pt
 2021-08-20 23:35:11.602 | INFO     | Language_modelling_training_colab:data_preprocess:679 - loaded D:\iisc\FL\graph-federated-learning\movie/train_data_.pt
 2021-08-20 23:35:11.873 | INFO     | papfl:__init__:28 - {'num_lstm_layers': 1, 'steps_for_validation': 10, 'hid_size': 300, 'learning_rate': 0.01, 'dropout': 0.1, 'weight_decay_factor': 0.5, 'min_learning_rate': 0.0001, 'master_path': 'D:\\iisc\\FL\\graph-federated-learning\\', 'max_seq_len': 40, 'batch_size': 128, 'alpha_lr': 1.0, 'load_model': 0, 'load_model_file': 0, 'epochs': 1, 'algorithm': 'papfl', 'device_id': 0, 'device': device(type='cuda', index=0), 'vocab_size': 9902, 'run_name': 'movie', 'jumbled': ''}
+2021-08-21 01:36:22.745 | INFO     | __main__:configsetters:58 - [('supreme', None), ('word_pred', None), ('Taskmaster', None), ('euro', None), ('movie', None)]
+2021-08-21 01:36:22.767 | INFO     | __main__:configsetters:68 - cuda:0
+2021-08-21 01:36:23.772 | INFO     | Language_modelling_training_colab:data_preprocess:583 - loaded D:\iisc\FL\graph-federated-learning\supreme/train_data_.pt
+2021-08-21 01:36:29.072 | INFO     | Language_modelling_training_colab:data_preprocess:583 - loaded D:\iisc\FL\graph-federated-learning\word_pred/train_data_.pt
+2021-08-21 01:36:30.720 | INFO     | Language_modelling_training_colab:data_preprocess:583 - loaded D:\iisc\FL\graph-federated-learning\Taskmaster/train_data_.pt
+2021-08-21 01:36:32.127 | INFO     | Language_modelling_training_colab:data_preprocess:583 - loaded D:\iisc\FL\graph-federated-learning\euro/train_data_.pt
+2021-08-21 01:36:34.255 | INFO     | Language_modelling_training_colab:data_preprocess:583 - loaded D:\iisc\FL\graph-federated-learning\movie/train_data_.pt
+2021-08-21 01:39:24.028 | INFO     | __main__:configsetters:58 - [('supreme', None), ('word_pred', None), ('Taskmaster', None), ('euro', None), ('movie', None)]
+2021-08-21 01:39:24.044 | INFO     | __main__:configsetters:68 - cuda:0
+2021-08-21 01:39:25.117 | INFO     | Language_modelling_training_colab:data_preprocess:583 - loaded D:\iisc\FL\graph-federated-learning\supreme/train_data_.pt
+2021-08-21 01:39:30.196 | INFO     | Language_modelling_training_colab:data_preprocess:583 - loaded D:\iisc\FL\graph-federated-learning\word_pred/train_data_.pt
+2021-08-21 01:39:32.411 | INFO     | Language_modelling_training_colab:data_preprocess:583 - loaded D:\iisc\FL\graph-federated-learning\Taskmaster/train_data_.pt
+2021-08-21 01:39:34.036 | INFO     | Language_modelling_training_colab:data_preprocess:583 - loaded D:\iisc\FL\graph-federated-learning\euro/train_data_.pt
+2021-08-21 01:39:36.249 | INFO     | Language_modelling_training_colab:data_preprocess:583 - loaded D:\iisc\FL\graph-federated-learning\movie/train_data_.pt
+2021-08-21 01:40:14.560 | INFO     | __main__:configsetters:60 - [('supreme', None), ('word_pred', None), ('Taskmaster', None), ('euro', None), ('movie', None)]
+2021-08-21 01:40:14.562 | INFO     | __main__:configsetters:70 - cuda:0
+2021-08-21 01:40:16.030 | INFO     | Language_modelling_training_colab:data_preprocess:583 - loaded D:\iisc\FL\graph-federated-learning\supreme/train_data_.pt
+2021-08-21 01:40:21.139 | INFO     | Language_modelling_training_colab:data_preprocess:583 - loaded D:\iisc\FL\graph-federated-learning\word_pred/train_data_.pt
+2021-08-21 01:40:22.763 | INFO     | Language_modelling_training_colab:data_preprocess:583 - loaded D:\iisc\FL\graph-federated-learning\Taskmaster/train_data_.pt
+2021-08-21 01:40:24.410 | INFO     | Language_modelling_training_colab:data_preprocess:583 - loaded D:\iisc\FL\graph-federated-learning\euro/train_data_.pt
+2021-08-21 01:40:26.283 | INFO     | Language_modelling_training_colab:data_preprocess:583 - loaded D:\iisc\FL\graph-federated-learning\movie/train_data_.pt
+2021-08-21 01:41:05.246 | INFO     | __main__:configsetters:60 - [('supreme', None), ('word_pred', None), ('Taskmaster', None), ('euro', None), ('movie', None)]
+2021-08-21 01:41:05.266 | INFO     | __main__:configsetters:70 - cuda:0
+2021-08-21 01:41:06.508 | INFO     | Language_modelling_training_colab:data_preprocess:583 - loaded D:\iisc\FL\graph-federated-learning\supreme/train_data_.pt
+2021-08-21 01:41:11.876 | INFO     | Language_modelling_training_colab:data_preprocess:583 - loaded D:\iisc\FL\graph-federated-learning\word_pred/train_data_.pt
+2021-08-21 01:41:13.324 | INFO     | Language_modelling_training_colab:data_preprocess:583 - loaded D:\iisc\FL\graph-federated-learning\Taskmaster/train_data_.pt
+2021-08-21 01:41:14.900 | INFO     | Language_modelling_training_colab:data_preprocess:583 - loaded D:\iisc\FL\graph-federated-learning\euro/train_data_.pt
+2021-08-21 01:41:16.802 | INFO     | Language_modelling_training_colab:data_preprocess:583 - loaded D:\iisc\FL\graph-federated-learning\movie/train_data_.pt
+2021-08-21 01:41:17.053 | INFO     | ServerClass:__init__:27 - {'num_lstm_layers': 1, 'steps_for_validation': 10, 'hid_size': 300, 'learning_rate': 0.01, 'dropout': 0.1, 'weight_decay_factor': 0.5, 'min_learning_rate': 0.0001, 'master_path': 'D:\\iisc\\FL\\graph-federated-learning\\', 'max_seq_len': 40, 'batch_size': 128, 'alpha_lr': 1.0, 'load_model': 0, 'load_model_file': 0, 'epochs': 1, 'algorithm': 'gapfl', 'device_id': 0, 'device': device(type='cuda', index=0), 'vocab_size': 9902, 'run_name': 'movie', 'jumbled': ''}
+2021-08-21 01:42:33.264 | INFO     | __main__:configsetters:60 - [('supreme', None), ('word_pred', None), ('Taskmaster', None), ('euro', None), ('movie', None)]
+2021-08-21 01:42:33.268 | INFO     | __main__:configsetters:70 - cuda:0
+2021-08-21 01:42:34.642 | INFO     | Language_modelling_training_colab:data_preprocess:583 - loaded D:\iisc\FL\graph-federated-learning\supreme/train_data_.pt
+2021-08-21 01:42:36.112 | INFO     | Language_modelling_training_colab:data_preprocess:583 - loaded D:\iisc\FL\graph-federated-learning\word_pred/train_data_.pt
+2021-08-21 01:42:36.174 | INFO     | Language_modelling_training_colab:data_preprocess:583 - loaded D:\iisc\FL\graph-federated-learning\Taskmaster/train_data_.pt
+2021-08-21 01:42:36.651 | INFO     | Language_modelling_training_colab:data_preprocess:583 - loaded D:\iisc\FL\graph-federated-learning\euro/train_data_.pt
+2021-08-21 01:42:38.459 | INFO     | Language_modelling_training_colab:data_preprocess:583 - loaded D:\iisc\FL\graph-federated-learning\movie/train_data_.pt
+2021-08-21 01:42:38.743 | INFO     | ServerClass:__init__:28 - {'num_lstm_layers': 1, 'steps_for_validation': 10, 'hid_size': 300, 'learning_rate': 0.01, 'dropout': 0.1, 'weight_decay_factor': 0.5, 'min_learning_rate': 0.0001, 'master_path': 'D:\\iisc\\FL\\graph-federated-learning\\', 'max_seq_len': 40, 'batch_size': 128, 'alpha_lr': 1.0, 'load_model': 0, 'load_model_file': 0, 'epochs': 1, 'algorithm': 'gapfl', 'device_id': 0, 'device': device(type='cuda', index=0), 'vocab_size': 9902, 'run_name': 'movie', 'jumbled': ''}
+2021-08-21 01:42:50.731 | INFO     | gapfl:model_train:121 - -------------------------
+2021-08-21 01:42:50.879 | INFO     | gapfl:model_train:122 - Round:
+2021-08-21 01:42:50.923 | INFO     | gapfl:model_train:123 - -------------------------
+2021-08-21 01:43:35.271 | INFO     | __main__:configsetters:60 - [('supreme', None), ('word_pred', None), ('Taskmaster', None), ('euro', None), ('movie', None)]
+2021-08-21 01:43:35.271 | INFO     | __main__:configsetters:70 - cuda:0
+2021-08-21 01:43:36.402 | INFO     | Language_modelling_training_colab:data_preprocess:583 - loaded D:\iisc\FL\graph-federated-learning\supreme/train_data_.pt
+2021-08-21 01:43:41.595 | INFO     | Language_modelling_training_colab:data_preprocess:583 - loaded D:\iisc\FL\graph-federated-learning\word_pred/train_data_.pt
+2021-08-21 01:43:43.383 | INFO     | Language_modelling_training_colab:data_preprocess:583 - loaded D:\iisc\FL\graph-federated-learning\Taskmaster/train_data_.pt
+2021-08-21 01:43:45.029 | INFO     | Language_modelling_training_colab:data_preprocess:583 - loaded D:\iisc\FL\graph-federated-learning\euro/train_data_.pt
+2021-08-21 01:43:46.971 | INFO     | Language_modelling_training_colab:data_preprocess:583 - loaded D:\iisc\FL\graph-federated-learning\movie/train_data_.pt
+2021-08-21 01:43:47.313 | INFO     | ServerClass:__init__:28 - {'num_lstm_layers': 1, 'steps_for_validation': 10, 'hid_size': 300, 'learning_rate': 0.01, 'dropout': 0.1, 'weight_decay_factor': 0.5, 'min_learning_rate': 0.0001, 'master_path': 'D:\\iisc\\FL\\graph-federated-learning\\', 'max_seq_len': 40, 'batch_size': 8, 'alpha_lr': 1.0, 'load_model': 0, 'load_model_file': 0, 'epochs': 1, 'algorithm': 'gapfl', 'device_id': 0, 'device': device(type='cuda', index=0), 'vocab_size': 9902, 'run_name': 'movie', 'jumbled': ''}
+2021-08-21 01:43:57.686 | INFO     | gapfl:model_train:121 - -------------------------
+2021-08-21 01:43:57.690 | INFO     | gapfl:model_train:122 - Round:
+2021-08-21 01:43:57.693 | INFO     | gapfl:model_train:123 - -------------------------
+2021-08-21 01:46:20.580 | INFO     | __main__:configsetters:60 - [('supreme', None), ('word_pred', None), ('Taskmaster', None), ('euro', None), ('movie', None)]
+2021-08-21 01:46:20.583 | INFO     | __main__:configsetters:70 - cuda:0
+2021-08-21 01:46:21.622 | INFO     | Language_modelling_training_colab:data_preprocess:583 - loaded D:\iisc\FL\graph-federated-learning\supreme/train_data_.pt
+2021-08-21 01:46:26.614 | INFO     | Language_modelling_training_colab:data_preprocess:583 - loaded D:\iisc\FL\graph-federated-learning\word_pred/train_data_.pt
+2021-08-21 01:46:28.291 | INFO     | Language_modelling_training_colab:data_preprocess:583 - loaded D:\iisc\FL\graph-federated-learning\Taskmaster/train_data_.pt
+2021-08-21 01:46:29.589 | INFO     | Language_modelling_training_colab:data_preprocess:583 - loaded D:\iisc\FL\graph-federated-learning\euro/train_data_.pt
+2021-08-21 01:46:30.535 | INFO     | Language_modelling_training_colab:data_preprocess:583 - loaded D:\iisc\FL\graph-federated-learning\movie/train_data_.pt
+2021-08-21 01:46:30.540 | INFO     | ServerClass:__init__:37 - {'num_lstm_layers': 1, 'steps_for_validation': 10, 'hid_size': 300, 'learning_rate': 0.01, 'dropout': 0.1, 'weight_decay_factor': 0.5, 'min_learning_rate': 0.0001, 'master_path': 'D:\\iisc\\FL\\graph-federated-learning\\', 'max_seq_len': 40, 'batch_size': 8, 'alpha_lr': 1.0, 'load_model': 0, 'load_model_file': 0, 'epochs': 1, 'algorithm': 'gapfl', 'device_id': 0, 'device': device(type='cuda', index=0), 'vocab_size': 9902, 'run_name': 'movie', 'jumbled': ''}
+2021-08-21 01:46:38.441 | INFO     | gapfl:model_train:121 - -------------------------
+2021-08-21 01:46:38.444 | INFO     | gapfl:model_train:122 - Round:
+2021-08-21 01:46:38.447 | INFO     | gapfl:model_train:123 - -------------------------
+2021-08-21 01:47:29.079 | INFO     | __main__:configsetters:60 - [('supreme', None), ('word_pred', None), ('Taskmaster', None), ('euro', None), ('movie', None)]
+2021-08-21 01:47:29.083 | INFO     | __main__:configsetters:70 - cuda:0
+2021-08-21 01:47:31.114 | INFO     | Language_modelling_training_colab:data_preprocess:583 - loaded D:\iisc\FL\graph-federated-learning\supreme/train_data_.pt
+2021-08-21 01:47:36.786 | INFO     | Language_modelling_training_colab:data_preprocess:583 - loaded D:\iisc\FL\graph-federated-learning\word_pred/train_data_.pt
+2021-08-21 01:47:37.005 | INFO     | Language_modelling_training_colab:data_preprocess:583 - loaded D:\iisc\FL\graph-federated-learning\Taskmaster/train_data_.pt
+2021-08-21 01:47:37.084 | INFO     | Language_modelling_training_colab:data_preprocess:583 - loaded D:\iisc\FL\graph-federated-learning\euro/train_data_.pt
+2021-08-21 01:47:37.134 | INFO     | Language_modelling_training_colab:data_preprocess:583 - loaded D:\iisc\FL\graph-federated-learning\movie/train_data_.pt
+2021-08-21 01:47:37.140 | INFO     | ServerClass:__init__:37 - {'num_lstm_layers': 1, 'steps_for_validation': 10, 'hid_size': 300, 'learning_rate': 0.01, 'dropout': 0.1, 'weight_decay_factor': 0.5, 'min_learning_rate': 0.0001, 'master_path': 'D:\\iisc\\FL\\graph-federated-learning\\', 'max_seq_len': 40, 'batch_size': 8, 'alpha_lr': 1.0, 'load_model': 0, 'load_model_file': 0, 'epochs': 1, 'algorithm': 'gapfl', 'device_id': 0, 'device': device(type='cuda', index=0), 'vocab_size': 9902, 'run_name': 'movie', 'jumbled': ''}
+2021-08-21 01:47:46.247 | INFO     | gapfl:model_train:121 - -------------------------
+2021-08-21 01:47:46.249 | INFO     | gapfl:model_train:122 - Round:
+2021-08-21 01:47:46.251 | INFO     | gapfl:model_train:123 - -------------------------
+2021-08-21 01:48:38.362 | INFO     | gapfl:model_train:121 - -------------------------
+2021-08-21 01:48:38.364 | INFO     | gapfl:model_train:122 - Round:
+2021-08-21 01:48:38.366 | INFO     | gapfl:model_train:123 - -------------------------
+2021-08-21 01:49:35.851 | INFO     | ServerClass:save_results:108 - Saving global training loss
+2021-08-21 01:52:55.153 | INFO     | __main__:configsetters:60 - [('supreme', None), ('word_pred', None), ('Taskmaster', None), ('euro', None), ('movie', None)]
+2021-08-21 01:52:55.155 | INFO     | __main__:configsetters:70 - cuda:0
+2021-08-21 01:52:56.293 | INFO     | Language_modelling_training_colab:data_preprocess:583 - loaded D:\iisc\FL\graph-federated-learning\supreme/train_data_.pt
+2021-08-21 01:53:01.338 | INFO     | Language_modelling_training_colab:data_preprocess:583 - loaded D:\iisc\FL\graph-federated-learning\word_pred/train_data_.pt
+2021-08-21 01:53:02.846 | INFO     | Language_modelling_training_colab:data_preprocess:583 - loaded D:\iisc\FL\graph-federated-learning\Taskmaster/train_data_.pt
+2021-08-21 01:53:03.313 | INFO     | Language_modelling_training_colab:data_preprocess:583 - loaded D:\iisc\FL\graph-federated-learning\euro/train_data_.pt
+2021-08-21 01:53:03.364 | INFO     | Language_modelling_training_colab:data_preprocess:583 - loaded D:\iisc\FL\graph-federated-learning\movie/train_data_.pt
+2021-08-21 01:53:03.371 | INFO     | ServerClass:__init__:37 - {'num_lstm_layers': 1, 'steps_for_validation': 10, 'hid_size': 300, 'learning_rate': 0.01, 'dropout': 0.1, 'weight_decay_factor': 0.5, 'min_learning_rate': 0.0001, 'master_path': 'D:\\iisc\\FL\\graph-federated-learning\\', 'max_seq_len': 40, 'batch_size': 1, 'alpha_lr': 1.0, 'load_model': 0, 'load_model_file': 0, 'epochs': 1, 'algorithm': 'gapfl', 'device_id': 0, 'device': device(type='cuda', index=0), 'vocab_size': 9902, 'run_name': 'movie', 'jumbled': ''}
+2021-08-21 01:53:16.204 | INFO     | gapfl:model_train:121 - -------------------------
+2021-08-21 01:53:16.206 | INFO     | gapfl:model_train:122 - Round:
+2021-08-21 01:53:16.209 | INFO     | gapfl:model_train:123 - -------------------------
+2021-08-21 02:00:53.158 | INFO     | gapfl:model_train:121 - -------------------------
+2021-08-21 02:00:53.162 | INFO     | gapfl:model_train:122 - Round:
+2021-08-21 02:00:53.166 | INFO     | gapfl:model_train:123 - -------------------------
+2021-08-21 02:09:02.940 | INFO     | ServerClass:save_results:109 - Saving global training loss
+2021-08-21 02:12:00.489 | INFO     | __main__:configsetters:60 - [('supreme', None), ('word_pred', None), ('Taskmaster', None), ('euro', None), ('movie', None)]
+2021-08-21 02:12:00.492 | INFO     | __main__:configsetters:70 - cuda:0
+2021-08-21 02:12:01.380 | INFO     | Language_modelling_training_colab:data_preprocess:583 - loaded D:\iisc\FL\graph-federated-learning\supreme/train_data_.pt
+2021-08-21 02:12:06.474 | INFO     | Language_modelling_training_colab:data_preprocess:583 - loaded D:\iisc\FL\graph-federated-learning\word_pred/train_data_.pt
+2021-08-21 02:12:08.049 | INFO     | Language_modelling_training_colab:data_preprocess:583 - loaded D:\iisc\FL\graph-federated-learning\Taskmaster/train_data_.pt
+2021-08-21 02:12:09.477 | INFO     | Language_modelling_training_colab:data_preprocess:583 - loaded D:\iisc\FL\graph-federated-learning\euro/train_data_.pt
+2021-08-21 02:12:10.959 | INFO     | Language_modelling_training_colab:data_preprocess:583 - loaded D:\iisc\FL\graph-federated-learning\movie/train_data_.pt
+2021-08-21 02:12:11.324 | INFO     | ServerClass:__init__:37 - {'num_lstm_layers': 1, 'steps_for_validation': 10, 'hid_size': 300, 'learning_rate': 0.01, 'dropout': 0.1, 'weight_decay_factor': 0.5, 'min_learning_rate': 0.0001, 'master_path': 'D:\\iisc\\FL\\graph-federated-learning\\', 'max_seq_len': 40, 'batch_size': 32, 'alpha_lr': 1.0, 'load_model': 0, 'load_model_file': 0, 'epochs': 1, 'algorithm': 'gapfl', 'device_id': 0, 'device': device(type='cuda', index=0), 'vocab_size': 9902, 'run_name': 'movie', 'jumbled': ''}
+2021-08-21 02:12:20.111 | INFO     | gapfl:model_train:121 - -------------------------
+2021-08-21 02:12:20.112 | INFO     | gapfl:model_train:122 - Round:
+2021-08-21 02:12:20.114 | INFO     | gapfl:model_train:123 - -------------------------

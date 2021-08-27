@@ -1,38 +1,20 @@
-# from Language_modelling_training_colab import *
-# params={}
-# params['NUM_CLIENTS']=5
-# params['learning_rate']=0.1
-# params['init_alpha']=0.5
-# params['num_rounds']=1502
-# params['tau']=10
-# options={}
-# options['batch_size']=128
-# options['max_seq_len']=40
-# options['num_lstm_layers']=1
-# options['hid_size']=300
-# options['dropout']=0.1
-# options['learning_rate']=0.01
-# options['min_learning_rate']=0.0001
-# options['weight_decay_factor']=0.5
-# options['run_name']='supreme'
-# options['epochs']=1
-# options['steps_for_validation']=500
-# options['match']=None
-# options['device']=torch.device('cuda:3')
-# opt_priv'
-# opt_priv'
-import torch.optim as optim
 import numpy as np
+import torch.optim as optim
+from tqdm import tqdm
+
 # Init all to same weights initially
 from Language_modelling_training_colab import *
-from tqdm import tqdm
-class fedavg():
-    def __init__(self,params,options,train_data,val_data,eng_obj):
-        self.params=params
-        self.options=options
-        self.train_data=train_data
-        self.val_data=val_data
-        self.eng_obj=eng_obj
+from ServerClass import ServerClass
+from ModelClass import Model
+
+class fedavg(ServerClass):
+    def __init__(self,params,options,train_data,val_data,eng_obj,data_lists):
+        ServerClass.__init__(self,params,options,train_data,val_data,eng_obj,alpha=None,data_list=data_lists)
+        # self.params=params
+        # self.options=options
+        # self.train_data=train_data
+        # self.val_data=val_data
+        # self.eng_obj=eng_obj
 
         
         models=[]
@@ -40,8 +22,6 @@ class fedavg():
         for i in range(self.params['NUM_CLIENTS']):
             temp_model={}
             temp_model['global']=Model(options,eng_obj.embeddings).to(self.options['device'])
-#             temp_model['private']=Model(options,temp.embeddings).to(options['device'])
-#             temp_model['personalized']=Model(options,temp.embeddings).to(options['device'])
             models.append(temp_model)
         
         client_ids=[i for i in range(self.params['NUM_CLIENTS'])]
@@ -72,12 +52,8 @@ class fedavg():
             fwd_sent=batch[1].view(-1)
             targs=torch.cat([fwd_sent,bwd_sent],dim=0)
             loss=criterion(out,targs.long())
-
-            print(loss.item())
-    #         print(learning_rate)
             opt_per=optim.SGD(initial_model['private'].parameters(),lr=options['learning_rate'])
             opt_per.zero_grad()
-    #         opt_priv[ind].zero_grad()
             loss.backward()
             grad_dict={}
             for param1,param2 in zip(initial_model['personalized'].named_parameters(),initial_model['private'].named_parameters()):
@@ -86,31 +62,25 @@ class fedavg():
                 grad_dict[param1[0]]=param1[1].grad.clone().detach()
                 param2[1].grad=param1[1].grad.clone().detach()
             self.opt_per.step()
-    #         opt_priv[ind].step()
             return initial_model['private'],loss,grad_dict
     def local_train(self,model, learning_rate, train_sents,ind,options,eng):
         def batch_fn(model, batch,flag,ind,options,eng):
             return self.batch_train(model, batch, learning_rate,flag,ind,options,eng)
-        l_local=[]
         l_global=[]
-        flag=0
-        k=0
+
         all_batches=DataLoader(train_sents,batch_size=options['batch_size'],shuffle=True)
         for idx,batch in enumerate(all_batches):
             if idx==1:
                 break
-            flag=1
             model['global'],losses,_=batch_fn(model,batch,0,ind,options,eng)
             l_global.append(losses)
         return model,l_global
-    def federated_train(self,data):
-        cur_loss_global=[];
-        cur_loss_local=[]
-        gradlist=[]
-        n_items=0
+
+    def federated_train(self):
+        cur_loss_global=[]
         for i in self.client_ids:
     #         print(alphas[i])
-            self.models[i],loss_global=self.local_train(self.models[i],self.options['learning_rate'],data[i],i,self.options,self.eng_obj)
+            self.models[i],loss_global=self.local_train(self.models[i],self.options['learning_rate'],self.train_data[i],i,self.options,self.eng_obj)
     #         print(alphas[i])
     #         cur_loss_local.append(sum(loss_local))
             cur_loss_global.append(sum(loss_global))
@@ -118,83 +88,71 @@ class fedavg():
         return self.models,sum(cur_loss_global)/len(self.client_ids)
 
     def model_train(self):
-    #     loss_500=[]
-#         options=self.options
-#         models=self.models
         val_loss=[]
         loss_temp=[]
         lossValues=[]
-#         val_loss=[]
+
         for round_num in range(self.params['num_rounds']):
             loss_temp=[]
-            print("-------------------------")
-            print("Round:",str(round_num))
-            print("-------------------------")
             if((round_num+1)%self.params['tau']==0):
                 for i in tqdm(range(len(self.client_ids))):
                     if i==0:
                         global_model=self.models[i]['global']
                     else:
                         for param in self.models[i]['global'].named_parameters():
-        #                     print(param[0])
                             global_model.state_dict()[param[0]][:]+=( self.models[i]['global'].state_dict()[param[0]][:])
                 for param in self.models[i]['global'].named_parameters():
-        #             if param[0]=='embedding.weight':
-        #                 print(global_model.state_dict()[param[0]])
                     global_model.state_dict()[param[0]][:]/=float(self.params['NUM_CLIENTS'])
-        #             if param[0]=='embedding.weight':
-        #                 print(global_model.state_dict()[param[0]])
                 for i in range(len(self.client_ids)):
                     for param in  self.models[i]['global'].named_parameters():
                         self.models[i]['global'].state_dict()[param[0]][:]=global_model.state_dict()[param[0]][:]
             else:
-                self.models,prev_loss_global=self.federated_train(self.train_data)
-            lossValues.append(prev_loss_global)
+                self.models,prev_loss_global=self.federated_train()
+            lossValues.append(prev_loss_global.item())
 
-            if round_num%10==0:
+            if round_num%self.options['steps_for_validation']==0:
+                logger.info("Round:"+str(round_num)+" loss: "+str(prev_loss_global.item()))
                 for ind in range(self.params['NUM_CLIENTS']):
                     loss_temp.append(self.val_func(self.models[ind]['global'],self.val_data[ind]))
                 val_loss.append(loss_temp)
         for ind in range(self.params['NUM_CLIENTS']):
             loss_temp.append(self.val_func(self.models[ind]['global'],self.val_data[ind]))
         val_loss.append(loss_temp)
-        model_path=self.options['master_path']+"fedavg_model.pt"
-        print(model_path)
-        torch.save(global_model.state_dict(),model_path)
+        self.save_results(None,lossValues,val_loss)
         return lossValues,val_loss
 
-    def plot_results(self,lossValues):
-        file_name='./results_temp.txt'
-        with open(file_name,'w') as fp: 
-            for item in lossValues:
-                fp.write(str(item.item())+'\n')
-            fp.write(str(params)+"\n")
-            fp.write(str(options))
-        lossv=[]
-        with open(file_name,'r') as fp:
-            data=fp.readlines()
-        for val in data[:-2]:
-            lossv.append(float(val.split("\n")[0]))
-        import matplotlib.pyplot as plt
-        plt.title("Plot of Training Loss vs iterations [FedAvg]")
-        plt.xlabel('Iterations')
-        plt.ylabel("Language Modelling Loss")
-        plt.plot(lossv)
-        plt.show()
-    def save_results(self,lossValues,val_loss):
-        file_name=self.options['master_path']+'results_feadavg'+str(self.options['run_type'])+"_"+str(self.options['learning_rate'])+'val.txt'
-        with open(file_name,'a') as fp: 
+    # def plot_results(self,lossValues):
+    #     file_name='./results_temp.txt'
+    #     with open(file_name,'w') as fp: 
     #         for item in lossValues:
     #             fp.write(str(item.item())+'\n')
-    #         for item in lossValueslocal:
-    #             fp.write(str(item.item())+'\n')
     #         fp.write(str(params)+"\n")
-    #         fp.write(str(options)+"\n")
-    #         fp.write(str(alphas)+"\n")
-            for losses in val_loss:
-                fp.write(" ".join(str(ac) for ac in losses)+"\n")
-    #         fp.write(" ".join(str(gc) for gc in loss_1000)+"\n")
-    #         fp.write(" ".join(str(pc) for pc in personalized_accs)+"\n")
+    #         fp.write(str(options))
+    #     lossv=[]
+    #     with open(file_name,'r') as fp:
+    #         data=fp.readlines()
+    #     for val in data[:-2]:
+    #         lossv.append(float(val.split("\n")[0]))
+    #     import matplotlib.pyplot as plt
+    #     plt.title("Plot of Training Loss vs iterations [FedAvg]")
+    #     plt.xlabel('Iterations')
+    #     plt.ylabel("Language Modelling Loss")
+    #     plt.plot(lossv)
+    #     plt.show()
+    # def save_results(self,lossValues,val_loss):
+    #     file_name=self.options['master_path']+'results_feadavg'+str(self.options['run_type'])+"_"+str(self.options['learning_rate'])+'val.txt'
+    #     with open(file_name,'a') as fp: 
+    # #         for item in lossValues:
+    # #             fp.write(str(item.item())+'\n')
+    # #         for item in lossValueslocal:
+    # #             fp.write(str(item.item())+'\n')
+    # #         fp.write(str(params)+"\n")
+    # #         fp.write(str(options)+"\n")
+    # #         fp.write(str(alphas)+"\n")
+    #         for losses in val_loss:
+    #             fp.write(" ".join(str(ac) for ac in losses)+"\n")
+    # #         fp.write(" ".join(str(gc) for gc in loss_1000)+"\n")
+    # #         fp.write(" ".join(str(pc) for pc in personalized_accs)+"\n")
 
     # data_list=[('supreme',None),('movie',None),('word_pred',None),('reddit','askscience'),('reddit','news_politics')]
     # data_list=[('supreme',None),('movie',None),('word_pred',None),('Taskmaster',None),('euro',None)]
@@ -220,15 +178,8 @@ class fedavg():
         """
         n_total=0
         n_loss=0
-        # Can modify to do on a restricted set of the sentences
-        # net
-        # global val_factor
         val_factor=0.1
-        # to make the training faster if a large validation set is there then restricting the datalength to be used
-        # val_factor is a config parameter (0 to 1)
         n=int(len(val_sents)*val_factor)
-    #     print(n)
-        # setting the model in eval mode
         net.eval()
         criterion=nn.CrossEntropyLoss(ignore_index=self.eng_obj.pad_token_id)
         valloader=DataLoader(val_sents,batch_size=self.options['batch_size'],shuffle=True)

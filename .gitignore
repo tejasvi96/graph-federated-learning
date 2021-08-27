@@ -1,3 +1,5 @@
 Outputs/
 *.pt
 *.rar
+__pycache__/
+*.zip

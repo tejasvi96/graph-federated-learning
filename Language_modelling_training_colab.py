@@ -86,103 +86,7 @@ def stream_load(eng,sents,options):
     arr_sents=TensorDataset(torch.from_numpy(arr_inp_sents),torch.from_numpy(arr_fwd_sents),torch.from_numpy(arr_bwd_sents))
     return arr_sents
 
-class Lang:
-    def __init__(self, name):
-        self.name = name
-        self.word2index = {}
-        self.word2count = {}
-        self.index2word = {0: "<s>", 1: "</s>",2:'<unk>',3:'<pad>'}
-        self.n_words = 4  # Count SOS and EOS and unk and pad        
-        self.pad_token_id=3
-        self.unk_token_id=2
-        self.embeddings=None
-    def addSentence(self, sentence):
-        for word in sentence.split(' '):
-            self.addWord(word)
 
-    def addWord(self, word):
-        if word not in self.word2index:
-            self.word2index[word] = self.n_words
-            self.word2count[word] = 1
-            self.index2word[self.n_words] = word
-            self.n_words += 1
-        else:
-            self.word2count[word] += 1
-import unicodedata,re
-def unicodeToAscii(s):
-    return ''.join(
-        c for c in unicodedata.normalize('NFD', s)
-        if unicodedata.category(c) != 'Mn'
-    )
-
-# Lowercase, trim, and remove non-letter characters
-
-
-def normalizeString(s):
-    s = unicodeToAscii(s.lower().strip())
-    s = re.sub(r"([.!?])", r" \1", s)
-    s = re.sub(r"[^a-zA-Z.!?]+", r" ", s)
-    return s
-
-
-class BiLMEncoder(ElmoLstm):
-    """Wrapper around BiLM to give it an interface 
-       Basically an lstm cell with a projection (reduced size than standard lstm if multiple layers are used)
-    """
-
-    def get_input_dim(self):
-        return self.input_size
-
-    def get_output_dim(self):
-        return self.hidden_size * 2
-class Model(nn.Module):
-    """ 
-        The LM Model to be used in case of the Streamed Input
-        Inherits from the base class nn.Module
-        init and forward are defined
-    """
-    def __init__(self,options,embedding_weights):
-        """
-            Options is a dictionary initialized using the configuration parameters like 
-            hid_size: The hidden size returned by the input module (Here we are using XLM-17-1280 so  it has a value of 1280)
-            dropout: The dropout value to be used in the BiLM and optionally in the linear layer
-            num_lstm_layers: The number of stacked layers of bilm
-            vocab_size: To initialize the final fully connected layer size
-        """
-        
-        super(Model, self).__init__()
-        self.options=options
-        
-#         logger.info(options)
-        self.embedding=nn.Embedding(options['vocab_size'],300).from_pretrained(torch.tensor(embedding_weights,dtype=torch.float))
-        self.embedding.requires_grad=False
-        self.bilm=BiLMEncoder(300,options['hid_size'],options['hid_size'],options['num_lstm_layers'],recurrent_dropout_probability=options['dropout'])
-        self.lin=torch.nn.Linear(options['hid_size'],options['vocab_size'])
-        self.dropout=nn.Dropout(p=options['dropout'])
-    def forward(self,enc_embedding):
-        """
-            This takes as input the tokenized stream
-            of shape (batch_size,max_seq_len,hid_size)
-            Returns a tensor of shape (2*hid_size*batch_size)*vocab_size
-            (2 is due to the bidirectionalism of bilm)
-        """
-        
-        inp=enc_embedding.to(torch.int64)
-        enc_embedding=self.embedding(inp)
-        # This is ideally a mask of ones and used as it is with streamed input
-        # Mask of ones of shape batch_size*max_seq_len
-        mask=torch.ones((enc_embedding.shape[0],self.options['max_seq_len'])).to(self.options['device'])
-        enc=self.bilm(enc_embedding,mask) 
-        # returns tensor of size 1*batch_size*max_seq_len*(2*hid_size)
-        # Here 2 is due to bidirectionalism
-        fwd,bwd=enc[:,:,:,:self.options['hid_size']],enc[:,:,:,self.options['hid_size']:]
-        # fwd and bwd of size 1*batch_size*max_seq_len*hid_size
-        logits_fwd=self.lin(fwd).view(enc_embedding.shape[0] * self.options['max_seq_len'], -1)
-        logits_bwd=self.lin(bwd).view(enc_embedding.shape[0] * self.options['max_seq_len'], -1)
-        # logits fwd and logits bwd each of sizes (batch_size*max_seq_len)*vocab_size
-        logits=torch.cat((logits_fwd,logits_bwd),dim=0)
-        # logits of sizes (2*batch_size*max_seq_len)*vocab_size
-        return logits
 import torch.optim as optim
 from torch.optim.lr_scheduler import ReduceLROnPlateau 
 from torch.utils.tensorboard import SummaryWriter
@@ -665,15 +569,18 @@ def jumble_sent(data,jumbles):
             jumbled_data.append(sentlist[0])
     return jumbled_data
 
-def data_preprocess(options,name,match=None):
-    if 'jumbled' not in options:
-        options['jumbled']=""
-    
+def data_preprocess(options,name,match=None,jumbled=0):
+
     if match is None:
         match=""
-    train_loaded_file=options['master_path']+options['run_name']+"/"+'train_data_'+match+options['jumbled']+'.pt'
-    
-    val_loaded_file=options['master_path']+options['run_name']+"/"+'val_data_'+match+options['jumbled']+'.pt'
+    if jumbled==1:
+      train_loaded_file=options['data_dir']+os.sep+name+os.sep+'train_data_'+match+'.pt'
+      val_loaded_file=options['data_dir']+os.sep+name+os.sep+'val_data_'+match+'.pt'
+    else:
+      train_loaded_file=options['data_dir']+os.sep+name+os.sep+'train_data_'+match+options['jumbled']+'.pt'
+      val_loaded_file=options['data_dir']+os.sep+name+os.sep+'val_data_'+match+options['jumbled']+'.pt'    
+    logger.info("Checking existence of "+train_loaded_file)
+
     if os.path.exists(train_loaded_file):
         train_sents=torch.load(train_loaded_file)
         logger.info("loaded "+train_loaded_file)
@@ -773,25 +680,16 @@ def data_preprocess(options,name,match=None):
     torch.save(val_sents,val_loaded_file)
     return train_sents,val_sents
 # data_list=[('supreme',None),('movie',None),('word_pred',None),('reddit','askscience'),('reddit','news_politics')]
-data_list=[('supreme',None),('movie',None),('word_pred',None),('Taskmaster',None),('euro',None)]
 
-def get_data_lists(options):
-    data=[]
-    val_data=[]
-    for ind in range(len(data_list)):
-        train_sents,val_sents=data_preprocess(options,name=data_list[ind][0],match=data_list[ind][1])
-#         if  options['run_type']:
-#             options['run_name']=data_list[0][0]
-#             train_sents,val_sents=data_preprocess(options,name=data_list[0][0],match=data_list[0][1])
-#         elif options['run_type']:
-#             options['run_name']=data_list[1][0]
-#             train_sents,val_sents=data_preprocess(options,name=data_list[1][0],match=data_list[1][1])
-#         else:
-#             options['run_name']=data_list[ind][0]
-#             train_sents,val_sents=data_preprocess(options,name=data_list[ind][0],match=data_list[ind][1])
-        data.append(train_sents)
-        val_data.append(val_sents)
-    return data,val_data
+# def get_data_lists(options):
+#     data=[]
+#     val_data=[]
+#     for ind in range(len(data_list)):
+#       #Comment this for non jumbled      
+#       train_sents,val_sents=data_preprocess(options,name=data_list[ind][0],match=data_list[ind][1],jumbled=options['jumbled_run_flags'][ind])
+#       data.append(train_sents)
+#       val_data.append(val_sents)
+#     return data,val_data
 
 def train_independently(options,train_data,val_data,eng_obj):
     train_loss=[]
@@ -799,7 +697,7 @@ def train_independently(options,train_data,val_data,eng_obj):
     for ind in range(0,len(data_list),1):
         options['run_name']=data_list[ind][0]
         options['match']=data_list[ind][1]
-        logobj=logger.add(options['master_path']+options['run_name']+".txt")
+        # logobj=logger.add(options['master_path']+options['run_name']+".txt")
         logger.info(options)
         train_sents,val_sents=train_data[ind],val_data[ind]
         num_train_samples=52000
